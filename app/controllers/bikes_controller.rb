@@ -1,5 +1,5 @@
 class BikesController < ApplicationController
-    before_action :set_bike, only: [:show, :update, :destroy]
+    # before_action : only: [:show, :update, :destroy]
 
     def index
       bikes = Bike.all
@@ -11,7 +11,7 @@ class BikesController < ApplicationController
     end
   
     def create
-      bike = current_user.bikes.build(bike_params)
+      bike = Bike.new(bike_params)
       if bike.save
         render json: bike, status: :created
       else
@@ -34,11 +34,11 @@ class BikesController < ApplicationController
   
     private
   
-    def set_bike
-      @bike = Bike.find(params[:id])
-    end
+    # def set_bike
+    #   @bike = Bike.find(params[:id])
+    # end
   
     def bike_params
-      params.require(:bike).permit(:name, :description)
+      params.permit(:name, :image, :description, :user_id)
     end
 end
