@@ -10,15 +10,34 @@ class ReviewsController < ApplicationController
     def show
       render json: @review
     end
-  
-    def create
-      review = current_user.reviews.build(review_params.merge(bike: @bike))
-      if review.save
-        render json: review, status: :created
-      else
-        render json: { errors: review.errors.full_messages }, status: :unprocessable_entity
+
+    def new
+        @bike = Bike.find(params[:bike_id])
+        @review = Review.new
       end
-    end
+  
+    #   def create
+    #     @bike = Bike.find(params[:bike_id])
+    #     @review = @bike.reviews.build(review_params)
+        
+    #     if @review.save
+    #       render json: @review, status: :created
+    #     else
+    #       render json: { errors: @review.errors.full_messages }, status: :unprocessable_entity
+    #     end
+    #   end
+    def create
+        @bike = Bike.find(params[:bike_id])
+        @review = @bike.reviews.build(review_params)
+        
+        if @review.save
+          render json: @review, status: :created
+        else
+          render json: { errors: @review.errors.full_messages }, status: :unprocessable_entity
+        end
+      end
+      
+      
   
     def update
       if @review.user == current_user && @review.update(review_params)
@@ -53,6 +72,6 @@ class ReviewsController < ApplicationController
     end
   
     def review_params
-      params.require(:review).permit(:content)
+      params.require(:review).permit(:content, :user_id, :bike_id)
     end
 end
