@@ -7,13 +7,13 @@ Rails.application.routes.draw do
   
 
   resources :bikes, only: [:index, :show, :create, :update, :destroy] do
-    resources :reviews
-    
+    resources :reviews, only: [:new, :create]    
 
   end
 
   resources :reviews do
     put '/like', to: 'reviews#like'
+    
   end
 end
 
